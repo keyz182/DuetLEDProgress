@@ -1,0 +1,12 @@
+[Unit]
+Description=Duet API LED Progress Indicator
+After=duetcontrolserver.service
+Requires=duetcontrolserver.service
+
+[Service]
+ExecStart=/opt/LEDProgress/LEDProgress
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
