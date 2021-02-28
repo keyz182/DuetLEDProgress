@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LEDControl": {
+      "commandName": "Project",
+      "remoteDebugEnabled": false
+    }
+  }
+}

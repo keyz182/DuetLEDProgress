@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "rpi-ws281x-dotnet/1.0.0": {
+        "runtime": {
+          "rpi-ws281x-dotnet.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "rpi-ws281x-dotnet/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
