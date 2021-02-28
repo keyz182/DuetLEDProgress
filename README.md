@@ -9,7 +9,7 @@ sudo systemctl enable ledprogress
 sudo systemctl start ledprogress
 ```
 
-
+![example](https://raw.githubusercontent.com/keyz182/DuetLEDProgress/main/img/1.jpg "example")
 
 ```
 $ LEDProgress.exe -h
