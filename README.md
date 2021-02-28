@@ -12,7 +12,7 @@ sudo systemctl start ledprogress
 ![example](https://raw.githubusercontent.com/keyz182/DuetLEDProgress/main/img/1.jpg "example")
 
 ```
-$ LEDProgress.exe -h
+$ /opt/LEDProgress/LEDProgress.exe -h
 Available command line arguments:
 -s, --socket <socket>: UNIX socket to connect to
 -p, --pin <pin>: The pin the LEDs are run from
