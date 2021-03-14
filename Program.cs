@@ -1,63 +1,71 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CommandLine;
 using DuetAPI.Connection;
 
 namespace LEDProgress
 {
     class Program
     {
+        public class Options
+        {
+            [Option('q', "quiet", Required = false, HelpText = "Suppress output", Default = false )]
+            public bool Quiet { get; set; }
+            
+            [Option('p', "pin", Required = false, HelpText = "Set the pin that LEDs are on.", Default = 12)]
+            public int Pin {get; set;}
+            
+            [Option('s', "socket", Required = false, HelpText = "UNIX socket to connect to.", Default = Defaults.FullSocketPath)]
+            public string Socket {get; set;}
+            
+            [Option('i', "invert", Required = false, HelpText = "WS281X Invert.", Default = false)]
+            public bool Invert {get; set;}
+            
+            [Option('c', "count", Required = false, HelpText = "Number of LEDs.", Default = 56)]
+            public int Count {get; set;}
+            
+            [Option('b', "brightness", Required = false, HelpText = "Max brightness.", Default = 255)]
+            public int Brightness {get; set;}
+            
+            [Option("status", Required = false, HelpText = "Enable status LEDs", Default = false)]
+            public bool Status {get; set;}
+            
+            [Option("fan0", Required = false, HelpText = "Fan 0 status", Default = false)]
+            public bool Fan0 {get; set;}
+            
+            [Option("fan1", Required = false, HelpText = "Fan 1 status", Default = false)]
+            public bool Fan1 {get; set;}
+            
+            [Option("fan2", Required = false, HelpText = "Fan 2 status", Default = false)]
+            public bool Fan2 {get; set;}
+            
+            [Option("heater0", Required = false, HelpText = "Heater 0 status", Default = false)]
+            public bool Heater0 {get; set;}
+            
+            [Option("heater1", Required = false, HelpText = "Heater 1 status", Default = false)]
+            public bool Heater1 {get; set;}
+        }
 		public static async Task Main(string[] args)
         {
-            // Parse the command line arguments
-            int pin = 12;
-            int count = 56;
-            byte brightness = 255;
-            string lastArg = null, socketPath = Defaults.FullSocketPath;
-            bool quiet = false;
-            bool invert = false;
-            foreach (string arg in args)
-            {
-                if (lastArg == "-s" || lastArg == "--socket")
-                {
-                    socketPath = arg;
-                }
-                else if (lastArg == "-p" || lastArg == "--pin")
-                {
-                    pin = int.Parse(arg);
-                }
-                else if (lastArg == "-c" || lastArg == "--count")
-                {
-                    count = int.Parse(arg);
-                }
-                else if (arg == "-q" || arg == "--quiet")
-                {
-                    quiet = true;
-                }
-                else if (arg == "-i" || arg == "--invert")
-                {
-                    invert = true;
-                }
-                else if (arg == "-b" || arg == "--brightness")
-                {
-                    brightness = byte.Parse(arg);
-                }
-                else if (arg == "-h" || arg == "--help")
-                {
-                    Console.WriteLine("Available command line arguments:");
-                    Console.WriteLine("-s, --socket <socket>: UNIX socket to connect to");
-                    Console.WriteLine("-p, --pin <pin>: The pin the LEDs are run from");
-                    Console.WriteLine("-i, --invert: WS281x Invert");
-                    Console.WriteLine("-c, --count <count>: The number of LEDs");
-                    Console.WriteLine("-b, --brightness <brightness>: Max brighness (0-255)");
-                    Console.WriteLine("-h, --help: Display this help text");
-                    return;
-                }
-                lastArg = arg;
-            }
+            await Parser.Default.ParseArguments<Options>(args)
+                   .WithParsedAsync<Options>(async o =>
+                   {
+                        Subscriber sub = new Subscriber(
+                            o.Pin, 
+                            o.Socket, 
+                            o.Count, 
+                            o.Quiet, 
+                            o.Brightness, 
+                            o.Invert,
+                            o.Status,
+                            o.Fan0,
+                            o.Fan1,
+                            o.Fan2,
+                            o.Heater0,
+                            o.Heater1);
 
-            Subscriber sub = new Subscriber(pin, socketPath, count, quiet, brightness, invert);
-
-            await sub.Subscribe();
+                        await sub.Subscribe();
+                   });
         }
     }
 }
